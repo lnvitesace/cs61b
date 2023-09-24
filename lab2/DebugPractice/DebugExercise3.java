@@ -12,6 +12,7 @@ public class DebugExercise3 {
             if (foodType.equals("turnip")) {
                 int newTotal = totalTurnips + numAvailable;
                 totalTurnips = newTotal;
+                // Problem: foods.csv line 89: "kroger turnip 0.45 -387128732"
             }
             in.readLine();
         }
