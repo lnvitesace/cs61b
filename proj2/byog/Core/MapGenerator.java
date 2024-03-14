@@ -28,7 +28,8 @@ public class MapGenerator {
 
     public static void generateHouse(TETile[][] world, Position pos, int width, int height) {
         if (width < 3 || height < 3) {
-            throw new IllegalArgumentException("Width and height of the house must grater than or equal to 3");
+            throw new IllegalArgumentException(
+                    "Width and height of the house must grater than or equal to 3");
         }
         int x = pos.x;
         int y = pos.y;
@@ -175,7 +176,8 @@ public class MapGenerator {
     /* Generate a random length for a hallway in a world
        that will never cause "ArrayIndexOutOfBounds" exception
      */
-    public static int randomSafeLength(TETile[][] world, Position startPos, String direction, Random random) {
+    public static int randomSafeLength(
+            TETile[][] world, Position startPos, String direction, Random random) {
         int x = startPos.x;
         int y = startPos.y;
         int width = world.length;
@@ -243,7 +245,8 @@ public class MapGenerator {
        If the space is too small to generate a hallway turn, it will return a random position
      */
 
-    public static Position safelyGenerateHallwayTurn(TETile[][] world, Position pos, String direction, Random random) {
+    public static Position safelyGenerateHallwayTurn(
+            TETile[][] world, Position pos, String direction, Random random) {
         int x = pos.x;
         int y = pos.y;
         int width = world.length;

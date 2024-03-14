@@ -48,7 +48,7 @@ public class Game {
 
             // Find the seed and use it to make the RANDOM
             String seedString = input.substring(1, input.length() - 2);
-            final long seed = Integer.parseInt(seedString);
+            final long seed = Long.parseLong(seedString);
             final Random random = new Random(seed);
 
             ter.initialize(WIDTH, HEIGHT);
