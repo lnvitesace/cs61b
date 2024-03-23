@@ -6,7 +6,7 @@ import edu.princeton.cs.introcs.StdStats;
 public class PercolationStats {
 
     private Percolation p;
-    private int[] results;
+    private double[] threshold;
     private int T;
 
     // perform T independent experiments on an N-by-N grid
@@ -15,28 +15,28 @@ public class PercolationStats {
             throw new IllegalArgumentException("N and T must greater than 0");
         }
 
-        p = pf.make(N);
-        results = new int[T];
+        threshold = new double[T];
         this.T = T;
 
         for (int i = 0; i < T; i++) {
+            p = pf.make(N);
             while (!p.percolates()) {
                 int randomRow = StdRandom.uniform(N);
                 int randomColumn = StdRandom.uniform(N);
                 p.open(randomRow, randomColumn);
             }
-            results[i] = p.numberOfOpenSites();
+            threshold[i] = p.numberOfOpenSites() * 1.0 / (N * N);
         }
     }
 
     // sample mean of percolation threshold
     public double mean() {
-        return StdStats.mean(results);
+        return StdStats.mean(threshold);
     }
 
     // sample standard deviation of percolation threshold
     public double stddev() {
-        return StdStats.stddev(results);
+        return StdStats.stddev(threshold);
     }
 
     // low endpoint of 95% confidence interval

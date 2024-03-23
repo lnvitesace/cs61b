@@ -27,28 +27,32 @@ public class Percolation {
 
         virtualTopSite = N * N;
         virtualBottomSite = N * N + 1;
-        // connect every top site with virtualTopSite, every bottom site with virtualBottomSite
-        for (int i = 0; i < N; i++) {
-            dsWithVirtualBottomSite.union(i, virtualTopSite);
-            dsWithoutVirtualBottomSite.union(i, virtualTopSite);
-        }
-        for (int i = 0; i < N; i++) {
-            dsWithVirtualBottomSite.union(xyTo1D(N - 1, i), virtualBottomSite);
-        }
     }
 
     private int xyTo1D(int x, int y) {
         return x * N + y;
     }
 
-
-    // open the site (row, col) if it is not open already
-    public void open(int row, int col) {
+    private void check(int row, int col) {
         if (row < 0 || col < 0 || row >= N || col >= N) {
             throw new IndexOutOfBoundsException("row and col must between 0 and N-1");
         }
+    }
+
+    // open the site (row, col) if it is not open already
+    public void open(int row, int col) {
+        check(row, col);
         if (isOpen(row, col)) {
             return;
+        }
+
+        // if the site is at the top or the bottom, connect it with virtual site
+        if (row == 0) {
+            dsWithVirtualBottomSite.union(xyTo1D(row, col), virtualTopSite);
+            dsWithoutVirtualBottomSite.union(xyTo1D(row, col), virtualTopSite);
+        }
+        if (row == N - 1) {
+            dsWithVirtualBottomSite.union(xyTo1D(row, col), virtualBottomSite);
         }
 
         gird[row][col] = true;
@@ -75,18 +79,15 @@ public class Percolation {
 
     // is the site (row, col) open?
     public boolean isOpen(int row, int col) {
-        if (row < 0 || col < 0 || row >= N || col >= N) {
-            throw new IndexOutOfBoundsException("row and col must between 0 and N-1");
-        }
+        check(row, col);
         return gird[row][col];
     }
 
     // is the site (row, col) full?
     public boolean isFull(int row, int col) {
-        if (row < 0 || col < 0 || row >= N || col >= N) {
-            throw new IndexOutOfBoundsException("row and col must between 0 and N-1");
-        }
-        return isOpen(row, col) && dsWithoutVirtualBottomSite.connected(xyTo1D(row, col), virtualTopSite);
+        check(row, col);
+        return isOpen(row, col) && dsWithoutVirtualBottomSite.connected(
+                xyTo1D(row, col), virtualTopSite);
     }
 
     // number of open sites
@@ -97,5 +98,9 @@ public class Percolation {
     // does the system percolate?
     public boolean percolates() {
         return dsWithVirtualBottomSite.connected(virtualTopSite, virtualBottomSite);
+    }
+
+    public static void main(String[] args) {
+        // I prefer to use JUnit to test
     }
 }
