@@ -6,7 +6,10 @@ import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import java.util.*;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.LinkedHashMap;
 
 /**
  * Graph for storing all of the intersection (vertex) and road (edge) information.
@@ -23,12 +26,10 @@ public class GraphDB {
     private static class Attributes {
         private final double lon;
         private final double lat;
-        private String name;
 
-        public Attributes(double lon, double lat, String name) {
+        public Attributes(double lon, double lat) {
             this.lon = lon;
             this.lat = lat;
-            this.name = name;
         }
     }
 
@@ -191,7 +192,7 @@ public class GraphDB {
 
     public void addNode(long id, double lon, double lat) {
         graph.putIfAbsent(id, new HashSet<>());
-        nodes.put(id, new Attributes(lon, lat, null));
+        nodes.put(id, new Attributes(lon, lat));
         newestVertex = id;
     }
 
@@ -208,9 +209,5 @@ public class GraphDB {
 
     public long newestVertex() {
         return newestVertex;
-    }
-
-    public void setName(long v, String name) {
-        nodes.get(v).name = name;
     }
 }

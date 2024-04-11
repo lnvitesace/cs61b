@@ -1,4 +1,9 @@
-import java.util.*;
+import java.util.List;
+import java.util.LinkedList;
+import java.util.PriorityQueue;
+import java.util.Set;
+import java.util.Objects;
+import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -50,6 +55,9 @@ public class Router {
         fringe.add(new SearchNode(start, null, 0, g.distance(start, destination)));
 
         while (true) {
+            if (fringe.isEmpty()) {
+                return shortestPath;
+            }
             SearchNode node = fringe.remove();
             long v = node.v;
             marked.add(v);

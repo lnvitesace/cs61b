@@ -1,8 +1,12 @@
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Arrays;
 
-import java.util.*;
 
 /**
  *  Parses OSM XML files using an XML SAX parser. Used to construct the graph of roads for
@@ -98,7 +102,7 @@ public class GraphBuildingHandler extends DefaultHandler {
             String k = attributes.getValue("k");
             String v = attributes.getValue("v");
             if (k.equals("maxspeed")) {
-//                System.out.println("Max Speed: " + v);
+                System.out.println("Max Speed: " + v);
             } else if (k.equals("highway")) {
 //                System.out.println("Highway type: " + v);
                 /* Hint: Setting a "flag" is good enough! */
@@ -106,7 +110,7 @@ public class GraphBuildingHandler extends DefaultHandler {
                     isValid = true;
                 }
             } else if (k.equals("name")) {
-//                System.out.println("Way Name: " + v);
+                System.out.println("Way Name: " + v);
             }
 //            System.out.println("Tag with k=" + k + ", v=" + v + ".");
         } else if (activeState.equals("node") && qName.equals("tag") && attributes.getValue("k")
@@ -116,7 +120,6 @@ public class GraphBuildingHandler extends DefaultHandler {
             node this tag belongs to. Remember XML is parsed top-to-bottom, so probably it's the
             last node that you looked at (check the first if-case). */
 //            System.out.println("Node's name: " + attributes.getValue("v"));
-            g.setName(g.newestVertex(), attributes.getValue("v"));
         }
     }
 
