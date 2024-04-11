@@ -1,5 +1,4 @@
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -12,6 +11,24 @@ import java.util.regex.Pattern;
  * down to the priority you use to order your vertices.
  */
 public class Router {
+    private static class SearchNode implements Comparable<SearchNode> {
+        long v;
+        SearchNode prev;
+        double distance;
+        double h;
+
+        public SearchNode(long v, SearchNode prev, double distance, double h) {
+            this.v = v;
+            this.prev = prev;
+            this.distance = distance;
+            this.h = h;
+        }
+
+        public int compareTo(SearchNode that) {
+            return Double.compare(this.distance + this.h, that.distance + that.h);
+        }
+    }
+
     /**
      * Return a List of longs representing the shortest path from the node
      * closest to a start location and the node closest to the destination
@@ -25,8 +42,38 @@ public class Router {
      */
     public static List<Long> shortestPath(GraphDB g, double stlon, double stlat,
                                           double destlon, double destlat) {
-        return null; // FIXME
+        List<Long> shortestPath = new LinkedList<>();
+        PriorityQueue<SearchNode> fringe = new PriorityQueue<>();
+        Set<Long> marked = new HashSet<>();
+        long start = g.closest(stlon, stlat);
+        long destination = g.closest(destlon, destlat);
+        fringe.add(new SearchNode(start, null, 0, g.distance(start, destination)));
+
+        while (true) {
+            SearchNode node = fringe.remove();
+            long v = node.v;
+            marked.add(v);
+
+            if (v == destination) {
+                while (node != null) {
+                    shortestPath.add(0, node.v);
+                    node = node.prev;
+                }
+                return shortestPath;
+            }
+
+            for (long neighbor : g.adjacent(v)) {
+                if (!marked.contains(neighbor)) {
+                    fringe.add(new SearchNode(
+                            neighbor,
+                            node,
+                            node.distance + g.distance(v, neighbor),
+                            g.distance(neighbor, destination)));
+                }
+            }
+        }
     }
+
 
     /**
      * Create the list of directions corresponding to a route on the graph.
@@ -37,7 +84,7 @@ public class Router {
      * route.
      */
     public static List<NavigationDirection> routeDirections(GraphDB g, List<Long> route) {
-        return null; // FIXME
+        return null;
     }
 
 
