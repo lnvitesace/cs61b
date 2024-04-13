@@ -1,3 +1,5 @@
+import java.util.*;
+
 /**
  * Class for doing Radix sort
  *
@@ -16,8 +18,16 @@ public class RadixSort {
      * @return String[] the sorted array
      */
     public static String[] sort(String[] asciis) {
-        // TODO: Implement LSD Sort
-        return null;
+        int maxLength = Integer.MIN_VALUE;
+        for (String s : asciis) {
+            maxLength = Math.max(maxLength, s.length());
+        }
+
+        String[] sorted = asciis.clone();
+        for (int i = maxLength - 1; i >= 0; i--) {
+            sortHelperLSD(sorted, i);
+        }
+        return sorted;
     }
 
     /**
@@ -28,7 +38,20 @@ public class RadixSort {
      */
     private static void sortHelperLSD(String[] asciis, int index) {
         // Optional LSD helper method for required LSD radix sort
-        return;
+        Map<Integer, List<String>> map = new HashMap<>();
+        int[] counts = new int[256];
+        for (String s : asciis) {
+            int i = index >= s.length() ? 0 : s.charAt(index);
+            counts[i]++;
+            map.computeIfAbsent(i, k -> new LinkedList<>()).add(s);
+        }
+
+        int k = 0;
+        for (int i = 0; i < counts.length; i++) {
+            for (int j = 0; j < counts[i]; j++) {
+                asciis[k++] = map.get(i).get(j);
+            }
+        }
     }
 
     /**

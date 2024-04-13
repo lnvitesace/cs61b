@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 /**
  * Class with 2 ways of doing Counting sort, one naive way and one "better" way
  *
@@ -66,7 +68,46 @@ public class CountingSort {
      * @param arr int array that will be sorted
      */
     public static int[] betterCountingSort(int[] arr) {
-        // TODO make counting sort work with arrays containing negative numbers.
-        return null;
+        int max = Integer.MIN_VALUE;
+        for (int i : arr) {
+            max = Math.max(max, i);
+        }
+        int min = Integer.MAX_VALUE;
+        for (int i : arr) {
+            min = Math.min(min, i);
+        }
+
+        int nonnegative = 0;
+        int negative = 0;
+        int[] nonnegativeCounts = max < 0 ? new int[0] : new int[max + 1];
+        int[] negativeCounts = min >= 0 ? new int[0] : new int[-min + 1];
+        for (int i : arr) {
+            if (i >= 0) {
+                nonnegativeCounts[i]++;
+                nonnegative++;
+            } else {
+                negativeCounts[-i]++;
+                negative++;
+            }
+        }
+
+        int[] nonneagtiveSorted = new int[nonnegative];
+        int k = 0;
+        for (int i = 0; i < nonnegativeCounts.length; i++) {
+            for (int j = 0; j < nonnegativeCounts[i]; j++ , k++) {
+                nonneagtiveSorted[k] = i;
+            }
+        }
+        int[] negativeSorted = new int[negative];
+        int h = negative - 1;
+        for (int i = 0; i < negativeCounts.length; i++) {
+            for (int j = 0; j < negativeCounts[i]; j++, h--) {
+                negativeSorted[h] = -i;
+            }
+        }
+
+        int[] sorted = Arrays.copyOf(negativeSorted, arr.length);
+        System.arraycopy(nonneagtiveSorted, 0, sorted, negativeSorted.length, nonneagtiveSorted.length);
+        return sorted;
     }
 }
