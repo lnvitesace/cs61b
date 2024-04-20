@@ -10,7 +10,6 @@ import huglife.Impassible;
 import huglife.Empty;
 
 /** Tests the plip class   
- *  @authr FIXME
  */
 
 public class TestPlip {
@@ -36,10 +35,15 @@ public class TestPlip {
 
     @Test
     public void testReplicate() {
-
+        Plip p = new Plip(2);
+        double pEnergy = p.energy();
+        Plip p2 = p.replicate();
+        assertNotSame(p, p2);
+        assertEquals(p.energy(), p2.energy(), 0.01);
+        assertEquals(pEnergy, p2.energy() * 2, 0.01);
     }
 
-    //@Test
+    @Test
     public void testChoose() {
         Plip p = new Plip(1.2);
         HashMap<Direction, Occupant> surrounded = new HashMap<Direction, Occupant>();
@@ -56,6 +60,13 @@ public class TestPlip {
         Action expected = new Action(Action.ActionType.STAY);
 
         assertEquals(expected, actual);
+
+        surrounded.put(Direction.TOP, new Empty());
+        actual = p.chooseAction(surrounded);
+        expected = new Action(Action.ActionType.REPLICATE, Direction.TOP);
+
+        assertEquals(expected, actual);
+
     }
 
     public static void main(String[] args) {
